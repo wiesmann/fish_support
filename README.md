@@ -21,3 +21,6 @@ if test -f ~/.config/fish/app_functions
   . ~/.config/fish/app_functions
 end
 ```
+
+The script uses `mdls` to find all Mac OS X applications and to get meta-data about them. 
+
