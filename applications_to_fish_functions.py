@@ -12,13 +12,16 @@ import subprocess
 import sys
 
 ENCODING = os.getenv('LANG', 'en_US.UTF-8').split('.')[1].lower()
+
 MDFIND = ('/usr/bin/mdfind', '-0', 'kMDItemKind == Application')
+
 MDLS = (
     '/usr/bin/mdls',
     '--name=kMDItemAppStoreCategory',
     '--name=kMDItemDisplayName',
     '--raw')
-FUNCTION_TEMPLATE = """function %(command_name)s -d "%(description)s"
+
+FUNCTION_TEMPLATE = """function %(command_name)s -d "%(description)s -v /usr/bin/open"
   /usr/bin/open -a %(application_path)s $argv
 end
 """
@@ -54,11 +57,12 @@ def MakeCommandName(path):
   name = os.path.basename(path).lower()
   return '_'.join(re.split(r'[().;!?,\s]', name))
 
+
 def EscapePath(path):
   return re.escape(path).replace('\/', '/')
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
   good_paths = itertools.ifilter(FilterPath, GetAllApps())
   for path, description in GetDescription(good_paths):
     args = {
@@ -67,5 +71,5 @@ if __name__ == '__main__':
       'application_path': EscapePath(path),
     }
     func_text = FUNCTION_TEMPLATE % args
-    print func_text.encode('utf-8')
+    print func_text.encode(ENCODING)
 
