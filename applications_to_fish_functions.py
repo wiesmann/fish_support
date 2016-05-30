@@ -21,7 +21,7 @@ MDLS = (
     '--name=kMDItemDisplayName',
     '--raw')
 
-FUNCTION_TEMPLATE = """function %(command_name)s -d "%(description)s -v /usr/bin/open"
+FUNCTION_TEMPLATE = """function %(command_name)s --description "%(description)s" --wraps /usr/bin/open
   /usr/bin/open -a %(application_path)s $argv
 end
 """
@@ -37,7 +37,7 @@ def GetDescription(paths):
     result = subprocess.check_output(command).decode(ENCODING)
     app_type, name,  = result.split('\0')
     if app_type != '(null)':
-      description = '%s (%s)' % (name, app_type)
+      description = u'%s – %s Application' % (name, app_type)
     else:
       description = name
     yield path, description
