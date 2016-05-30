@@ -48,13 +48,15 @@ def FilterPath(path):
     return False
   if path.startswith('/Library'):
     return False
+  if path.startswith(os.path.expanduser("~/Library")):
+    return False
   if not path.endswith('.app'):
     return False
   return True
 
 
 def MakeCommandName(path):
-  name = os.path.basename(path).lower()
+  name = os.path.basename(path).lower().replace("'","").replace('"', '')
   return '_'.join(re.split(r'[().;!?,\s]', name))
 
 
@@ -62,11 +64,15 @@ def EscapePath(path):
   return re.escape(path).replace('\/', '/')
 
 
+def EscapeDescription(description):
+  return description.replace("'", "\\'").replace('"', '\\"')
+
+
 if __name__ == '__main__':
   good_paths = itertools.ifilter(FilterPath, GetAllApps())
   for path, description in GetDescription(good_paths):
     args = {
-      'description': description,
+      'description': EscapeDescription(description),
       'command_name': MakeCommandName(path),
       'application_path': EscapePath(path),
     }
