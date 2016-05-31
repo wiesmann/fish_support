@@ -87,12 +87,12 @@ if __name__ == '__main__':
     if command in commands:
       sys.stderr.write("Ignoring duplicate command %s\n" % command)
     else:
-    	commands.add(command)
-    	args = {
-      	'description': EscapeDescription(description),
-      	'command_name': command,
-      	'application_path': EscapePath(path),
-    	}
-    	func_text = FUNCTION_TEMPLATE % args
-    	sys.stdout.write(func_text.encode(ENCODING))
+      commands.add(command)
+      args = {
+        'description': EscapeDescription(description),
+        'command_name': command,
+        'application_path': EscapePath(path),
+      }
+      func_text = FUNCTION_TEMPLATE % args
+      sys.stdout.write(func_text.encode(ENCODING))
 
